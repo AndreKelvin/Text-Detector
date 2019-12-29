@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/corner_radius"
+    android:id="@+id/relativeLayoutLanguage">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewRecyclerLanguage"
+        android:layout_width="64dp"
+        android:layout_height="45dp"
+        app:srcCompat="@drawable/englishflag" />
+
+    <TextView
+        android:id="@+id/textViewRecyclerLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_marginTop="7dp"
+        android:layout_toEndOf="@id/imageViewRecyclerLanguage"
+        android:layout_toRightOf="@id/imageViewRecyclerLanguage"
+        android:text="English"
+        android:layout_marginStart="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp" />
+
+     <!--<ImageView
+        android:id="@+id/imageViewRecyclerCheck"
+        android:layout_width="36dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toEndOf="@id/textViewRecyclerLanguage"
+        android:layout_toRightOf="@id/textViewRecyclerLanguage"
+        app:srcCompat="@drawable/ic_check" />-->
+
+</RelativeLayout>

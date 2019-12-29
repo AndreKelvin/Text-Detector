@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.mobile.textdetector"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 3
+        versionName "3.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
+        /*javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }*/
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //this tell android studio to use the string url in the Test Directory.
+    //for sharing data or accessing classes in this Directory
+    //so that both instrumental and local unit test can use it
+    sourceSets {
+        androidTest.java.srcDirs += "src/test-share-data/java"
+        test.java.srcDirs += "src/test-share-data/java"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //INSTRUMENTATION TESTS (JUnit4)
+    testImplementation 'junit:junit:4.12'
+
+    // AndroidX test
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation "androidx.test:core:1.2.0"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Architecture components testing
+    androidTestImplementation "androidx.arch.core:core-testing:2.0.0"
+
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.android.support:design:28.0.0'
+
+    //Camera Source Api
+    implementation 'com.google.android.gms:play-services-vision:19.0.0'
+
+    //Firebase MLkit
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
+    implementation 'com.google.firebase:firebase-ml-natural-language:22.0.0'
+    implementation 'com.google.firebase:firebase-ml-natural-language-translate-model:20.0.7'
+    implementation 'com.google.firebase:firebase-ml-natural-language-language-id-model:20.0.7'
+
+    //Room Db
+    implementation 'android.arch.persistence.room:runtime:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+
+    //Swipe Detector
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.1'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+
+    //Admob
+    implementation 'com.google.android.gms:play-services-ads:18.3.0'
+
+    implementation 'com.android.support:multidex:1.0.3'
+}

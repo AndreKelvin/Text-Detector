@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/corner_radius"
+    android:id="@+id/linearLayout">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageViewSavedText"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:srcCompat="@tools:sample/avatars[13]"/>
+
+    <TextView
+        android:id="@+id/textViewSavedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="5dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:layout_toEndOf="@id/imageViewSavedText"
+        android:layout_toRightOf="@id/imageViewSavedText"
+        android:layout_below="@+id/textViewSavedTextDate"/>
+
+    <TextView
+        android:id="@+id/textViewSavedTextTranslated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textViewSavedTextTranslatedCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textViewSavedTextID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textViewSavedTextDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10:58 am 25-11-2019"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:paddingRight="5dp"
+        android:paddingEnd="5dp" />
+
+</RelativeLayout>

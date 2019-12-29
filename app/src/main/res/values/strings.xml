@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TextDetector</string>
+
+    <!-- TODO: Remove or change this placeholder text1 -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_translate_to">Translate To</string>
+    <string name="text_view_share">Share</string>
+    <string name="text_view_translate">Translate</string>
+    <string name="text_view_save">Save</string>
+    <string name="tab_text_video">Video</string>
+    <string name="tab_text_photo">Photo</string>
+    <string name="button_detect_text">Detect Text</string>
+    <string name="text_view_language_selected">Language Selected</string>
+    <string name="text_view_no_item">No Data</string>
+    <string name="this_may_take_a_while_please_wait">This may take a while. Please wait</string>
+</resources>
