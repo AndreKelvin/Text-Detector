@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +25,7 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+import com.mobile.textdetector.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +36,7 @@ public class ImageTextDetectorActivity extends AppCompatActivity {
     private FirebaseVisionImage firebaseVisionImage;
     private FirebaseVisionTextRecognizer textDetector;
     private File chooserImageFile, capturedImageFile;
-    static final String IMAGE_PATH="IMAGE_PATH";
+    public static final String IMAGE_PATH="IMAGE_PATH";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

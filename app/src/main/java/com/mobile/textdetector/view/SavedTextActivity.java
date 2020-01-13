@@ -1,11 +1,11 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +19,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,29 +29,30 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.mobile.textdetector.R;
+import com.mobile.textdetector.adapters.RecyclerViewSavedTextAdapter;
+import com.mobile.textdetector.recyclerviewmodels.SavedTextItem;
+import com.mobile.textdetector.viewmodel.ViewModel;
 
-import java.io.File;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import RoomDB.TextDetectorDbTable;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 public class SavedTextActivity extends AppCompatActivity implements RecyclerViewSavedTextAdapter.OnItemClick, RecyclerViewSavedTextAdapter.OnItemLongClick {
 
     private RecyclerViewSavedTextAdapter textAdapter;
-    private List<SavedTextItem> savedTextList, selectedText, textItems;
+    private List<SavedTextItem> savedTextList, selectedText, selectedTextItem;
     private Snackbar snackBar;
     private List<String> deletedText, deletedTextTranslated, deletedTextTranslatedCode, deletedTextImage, deletedDate;
     private List<Integer> deletedID;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private ActionMode actionMode;
-    public static final String ITEM_IS_LONG_CLICKED="ITEM_IS_LONG_CLICKED";
+    public static final String ITEM_IS_LONG_CLICKED = "ITEM_IS_LONG_CLICKED";
     private AppCompatTextView textViewNoData;
     private RecyclerView recyclerView;
+    private ViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +73,8 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        savedTextList = new ArrayList<>();
         selectedText = new ArrayList<>();
-        textItems = new ArrayList<>();
+        selectedTextItem = new ArrayList<>();
 
         deletedID = new ArrayList<>();
         deletedText = new ArrayList<>();
@@ -86,7 +88,7 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        textAdapter = new RecyclerViewSavedTextAdapter(this, savedTextList, selectedText);
+        textAdapter = new RecyclerViewSavedTextAdapter(this, selectedText);
 
         recyclerView.setAdapter(textAdapter);
 
@@ -94,6 +96,27 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
 
         snackBar = Snackbar.make(coordinatorLayout, "Item Deleted", Snackbar.LENGTH_LONG);
         snackBar.setActionTextColor(Color.WHITE);
+
+        viewModel = ViewModelProviders.of(this).get(ViewModel.class);
+        viewModel.getAllDetectedText().observe(this, new Observer<List<SavedTextItem>>() {
+            @Override
+            public void onChanged(List<SavedTextItem> savedTextItems) {
+                Log.d("MY_TAG","Activity Started");
+                if (savedTextItems!=null){
+                    Log.d("MY_TAG","Saved Text Items not null");
+                    selectedText.clear();
+
+                    textAdapter.setSavedTextList(savedTextItems);
+                    savedTextList=textAdapter.getSavedTextList();
+
+                    textAdapter.updateFilterList(savedTextList);
+                    setRecyclerViewVisibility();
+                }else {
+                    Log.d("MY_TAG","Saved Text Items is null");
+                    setRecyclerViewVisibility();
+                }
+            }
+        });
 
         //Swipe Left or Right to Delete
         //Display Snack bar to undo delete
@@ -146,7 +169,7 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
                 snackBar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                     public void onDismissed(Snackbar transientBottomBar, int event) {
                         if (event != DISMISS_EVENT_ACTION) {
-                            new DeleteTextFromDB(SavedTextActivity.this).execute();
+                            deleteDetectedText();
                         }
                     }
                 });
@@ -173,11 +196,31 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
         }).attachToRecyclerView(recyclerView);
     }
 
-    @Override
+    private void deleteDetectedText(){
+        viewModel.isTextDeleted().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Log.d("MY_TAG","Text Actually Deleted!!!");
+                setRecyclerViewVisibility();
+            }
+        });
+
+        viewModel.deleteDetectedText(
+                selectedTextItem,
+                deletedID,
+                deletedText,
+                deletedTextTranslated,
+                deletedTextTranslatedCode,
+                deletedTextImage,
+                deletedDate);
+    }
+
+    /*@Override
     protected void onResume() {
         super.onResume();
-        new GetTextFromDB(this).execute();
-    }
+        viewModel.getAllDetectedText();
+        //new GetTextFromDB(this).execute();
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -251,12 +294,23 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
                         textAdapter.updateFilterList(savedTextList);
                     }
 
+                    /*
+                    pass all selected text item to a new array list
+                    because "actionMode.finish()" removes the Action Mode form tool bar
+                    and calls "onDestroyActionMode" where "textAdapter.unSelectAllText()" is called
+                    which will clear the Selected text item where by resulting to an empty list item
+                    when Delete thread is running
+                    so this new array list will get all selected text item before it's cleared
+                    and will be used when Delete thread is running
+                     */
+                    selectedTextItem = new ArrayList<>(selectedText);
+
                     //delete the item from database only when the snack bar is Dismissed
                     //and Undo button is not clicked
                     snackBar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             if (event != DISMISS_EVENT_ACTION) {
-                                new DeleteTextFromDB(SavedTextActivity.this).execute();
+                                deleteDetectedText();
                             }
                         }
                     });
@@ -264,23 +318,14 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
                     snackBar.setAction("Undo", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            onResume();
+                            //onResume();
+                            viewModel.getAllDetectedText();
                             selectedText.clear();
+                            //textAdapter.notifyDataSetChanged();
                             Toast.makeText(SavedTextActivity.this, "Deleted Item Restored", Toast.LENGTH_SHORT).show();
                         }
                     });
                     snackBar.show();
-
-                    /*
-                    pass all selected text item to a new array list
-                    because "actionMode.finish()" removes to Action Mode form tool bar
-                    and calls "onDestroyActionMode" where i called "textAdapter.unSelectAllText()"
-                    which will clear the Selected text item where by resulting to an empty list item
-                    when Delete thread is running
-                    so this new array list will get all selected text item before it's cleared
-                    and will be used when Delete thread is running
-                     */
-                    textItems = new ArrayList<>(selectedText);
 
                     actionMode.finish();
                     disableItemClick();
@@ -358,7 +403,7 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
         }
     }
 
-    private static class GetTextFromDB extends AsyncTask<Void, Void, Void> {
+    /*private static class GetTextFromDB extends AsyncTask<Void, Void, Void> {
 
         private WeakReference<SavedTextActivity> weakReference;
 
@@ -377,7 +422,7 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
             activity.savedTextList.clear();
             activity.selectedText.clear();
 
-            List<TextDetectorDbTable> list = MainActivity.textDetectorDb.detectorDao().getAllDetectedText();
+            LiveData<List<TextDetectorDbTable>> list = MainActivity.textDetectorDb.detectorDao().getAllDetectedText();
             for (TextDetectorDbTable text : list) {
                 activity.savedTextList.add(new SavedTextItem(
                         text.getId(),
@@ -403,9 +448,9 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
             activity.textAdapter.notifyDataSetChanged();
             activity.setRecyclerViewVisibility();
         }
-    }
+    }*/
 
-    private static class DeleteTextFromDB extends AsyncTask<Void, Void, Void> {
+    /*private static class DeleteTextFromDB extends AsyncTask<Void, Void, Void> {
 
         private WeakReference<SavedTextActivity> weakReference;
 
@@ -422,20 +467,20 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
             }
 
             //user clicks delete icon in action menu
-            if (!activity.textItems.isEmpty()) {
-                for (int i = 0; i < activity.textItems.size(); i++) {
+            if (!activity.selectedTextItem.isEmpty()) {
+                for (int i = 0; i < activity.selectedTextItem.size(); i++) {
 
                     TextDetectorDbTable detectorDbTable = new TextDetectorDbTable(
-                            activity.textItems.get(i).getTextID(),
-                            activity.textItems.get(i).getText(),
-                            activity.textItems.get(i).getTextTranslated(),
-                            activity.textItems.get(i).getTextTranslatedCode(),
-                            activity.textItems.get(i).getImage(),
-                            activity.textItems.get(i).getDate());
+                            activity.selectedTextItem.get(i).getTextID(),
+                            activity.selectedTextItem.get(i).getText(),
+                            activity.selectedTextItem.get(i).getTextTranslated(),
+                            activity.selectedTextItem.get(i).getTextTranslatedCode(),
+                            activity.selectedTextItem.get(i).getImage(),
+                            activity.selectedTextItem.get(i).getDate());
 
                     //Delete the actual image in storage/emulated/0/Android/data/com.mobile.textdetector/files/Pictures
-                    if (activity.textItems.get(i).getImage() != null) {
-                        File file = new File(activity.textItems.get(i).getImage());
+                    if (activity.selectedTextItem.get(i).getImage() != null) {
+                        File file = new File(activity.selectedTextItem.get(i).getImage());
                         file.delete();
                     }
                     MainActivity.textDetectorDb.detectorDao().deleteDetectedText(detectorDbTable);
@@ -475,7 +520,7 @@ public class SavedTextActivity extends AppCompatActivity implements RecyclerView
             activity.textAdapter.notifyDataSetChanged();
             activity.setRecyclerViewVisibility();
             activity.selectedText.clear();
-            activity.textItems.clear();
+            activity.selectedTextItem.clear();
         }
-    }
+    }*/
 }

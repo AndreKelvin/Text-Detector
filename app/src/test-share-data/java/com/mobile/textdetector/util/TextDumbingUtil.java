@@ -1,5 +1,11 @@
 package com.mobile.textdetector.util;
 
+import com.mobile.textdetector.recyclerviewmodels.SavedTextItem;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class TextDumbingUtil {
 
     public static int ID=1;
@@ -14,4 +20,29 @@ public class TextDumbingUtil {
     public static String IMAGE_UPDATED="the image url updated";
     public static String DATE="25/12/2019";
     public static String DATE_UPDATED="26/12/2019";
+    public static List<SavedTextItem> SAVED_TEXT_ITEMS= Collections.unmodifiableList(
+            new ArrayList<SavedTextItem>(){{
+                add(new SavedTextItem(
+                        1,
+                        "Take out the trash",
+                        null,
+                        null,
+                        null,
+                        "01/01/2020"));
+                add(new SavedTextItem(
+                        2,
+                        "Anniversary gift",
+                        "Buy an anniversary gift.",
+                        null,
+                        null,
+                        "01/01/2020"));
+                add(new SavedTextItem(
+                        3,
+                        "Anniversary gift",
+                        "Buy an anniversary gift.",
+                        "timmy timmy turner",
+                        "fr",
+                        "01/01/2020"));
+            }}
+    );
 }

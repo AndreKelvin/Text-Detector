@@ -24,11 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.launcher"
         android:fullBackupContent="true">
-        <activity android:name="com.mobile.textdetector.SavedTextActivity"/>
-        <activity android:name="com.mobile.textdetector.TranslateActivity" />
-        <activity android:name="com.mobile.textdetector.DisplayTextActivity" />
-        <activity android:name="com.mobile.textdetector.ImageTextDetectorActivity" />
-        <activity android:name="com.mobile.textdetector.MainActivity">
+        <activity android:name="com.mobile.textdetector.view.SavedTextActivity"/>
+        <activity android:name="com.mobile.textdetector.view.TranslateActivity" />
+        <activity android:name="com.mobile.textdetector.view.DisplayTextActivity" />
+        <activity android:name="com.mobile.textdetector.view.ImageTextDetectorActivity" />
+        <activity android:name="com.mobile.textdetector.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

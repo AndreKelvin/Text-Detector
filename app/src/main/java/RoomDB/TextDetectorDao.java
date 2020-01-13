@@ -14,7 +14,7 @@ public interface TextDetectorDao {
     @Insert
     void addDetectedText(TextDetectorDbTable text);
 
-    @Query("Select * from TextDetectorDbTable")
+    @Query("Select * from TextDetectorDbTable ORDER BY id DESC")
     List<TextDetectorDbTable> getAllDetectedText();
 
     @Delete

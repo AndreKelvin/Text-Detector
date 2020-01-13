@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,10 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.mobile.textdetector.view.DisplayTextActivity;
+import com.mobile.textdetector.R;
+import com.mobile.textdetector.view.SavedTextActivity;
+import com.mobile.textdetector.recyclerviewmodels.SavedTextItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +32,15 @@ public class RecyclerViewSavedTextAdapter extends RecyclerView.Adapter<RecyclerV
     private List<SavedTextItem> savedTextList, selectedText, filterTextList;
     private OnItemLongClick onItemLongClickReceiver;
     private OnItemClick onItemClickReceiver;
-    static final String SAVED_TEXT="SAVED_TEXT";
-    static final String SAVED_TEXT_ID="SAVED_TEXT_ID";
-    static final String SAVED_IMAGE_PATH="SAVED_IMAGE_PATH";
-    static final String SAVED_TEXT_TRANSLATED="SAVED_TEXT_TRANSLATED";
-    static final String SAVED_TEXT_TRANSLATED_CODE="SAVED_TEXT_TRANSLATED_CODE";
+    public static final String SAVED_TEXT="SAVED_TEXT";
+    public static final String SAVED_TEXT_ID="SAVED_TEXT_ID";
+    public static final String SAVED_IMAGE_PATH="SAVED_IMAGE_PATH";
+    public static final String SAVED_TEXT_TRANSLATED="SAVED_TEXT_TRANSLATED";
+    public static final String SAVED_TEXT_TRANSLATED_CODE="SAVED_TEXT_TRANSLATED_CODE";
 
-    RecyclerViewSavedTextAdapter(Context context, List<SavedTextItem> savedTextList, List<SavedTextItem> selectedText) {
+    public RecyclerViewSavedTextAdapter(Context context, List<SavedTextItem> selectedText) {
         this.context = context;
-        this.savedTextList = savedTextList;
+        this.savedTextList = new ArrayList<>();
         this.selectedText = selectedText;
         filterTextList = new ArrayList<>();
     }
@@ -128,7 +132,16 @@ public class RecyclerViewSavedTextAdapter extends RecyclerView.Adapter<RecyclerV
         return savedTextList.size();
     }
 
-    SavedTextItem getTextAt(int position) {
+    public void setSavedTextList(List<SavedTextItem> savedTextItem) {
+        this.savedTextList = savedTextItem;
+        notifyDataSetChanged();
+    }
+
+    public List<SavedTextItem> getSavedTextList(){
+        return savedTextList;
+    }
+
+    public SavedTextItem getTextAt(int position) {
         return savedTextList.get(position);
     }
 
@@ -140,23 +153,23 @@ public class RecyclerViewSavedTextAdapter extends RecyclerView.Adapter<RecyclerV
         holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.corner_radius));
     }
 
-    void setActionModeReceiver(OnItemLongClick longClickReceiver, OnItemClick clickReceiver) {
+    public void setActionModeReceiver(OnItemLongClick longClickReceiver, OnItemClick clickReceiver) {
         this.onItemLongClickReceiver = longClickReceiver;
         this.onItemClickReceiver = clickReceiver;
     }
 
-    void selectAllText() {
+    public void selectAllText() {
         selectedText.clear();
         selectedText.addAll(savedTextList);
         notifyDataSetChanged();
     }
 
-    void unSelectAllText() {
+    public void unSelectAllText() {
         selectedText.clear();
         notifyDataSetChanged();
     }
 
-    void updateFilterList(List<SavedTextItem> filterTextList) {
+    public void updateFilterList(List<SavedTextItem> filterTextList) {
         this.filterTextList.clear();
         this.filterTextList.addAll(filterTextList);
     }

@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -8,13 +8,14 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,7 +26,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,15 +42,13 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguag
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateRemoteModel;
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
 import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
+import com.mobile.textdetector.R;
+import com.mobile.textdetector.adapters.RecyclerViewLanguageAdapter;
+import com.mobile.textdetector.adapters.RecyclerViewSavedTextAdapter;
+import com.mobile.textdetector.viewmodel.ViewModel;
 
 import java.io.File;
-import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import RoomDB.TextDetectorDbTable;
 
 public class DisplayTextActivity extends AppCompatActivity {
 
@@ -65,6 +63,7 @@ public class DisplayTextActivity extends AppCompatActivity {
     private String selectedLanguageCode, text, textID, imagePath;
     private TextToSpeech textToSpeech, textToSpeechTranslated;
     private FirebaseTranslator translator;
+    private ViewModel viewModel;
 
     //this boolean is to indicate weather "saveText" method is called(when save to db)
     //if it's called the boolean will be true
@@ -242,6 +241,8 @@ public class DisplayTextActivity extends AppCompatActivity {
             }
         });
 
+        viewModel = ViewModelProviders.of(this).get(ViewModel.class);
+
     }
 
     public void openTranslate(View view) {
@@ -250,7 +251,27 @@ public class DisplayTextActivity extends AppCompatActivity {
     }
 
     public void saveText(View view) {
-        new SaveTextDB(this).execute();
+        viewModel.isTextSaved().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                imageAndTextSaved=true;
+                Toast.makeText(DisplayTextActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+
+                //after text has been saved or updated. refresh data in recycler view
+                viewModel.getAllDetectedText();
+            }
+        });
+        viewModel.saveDetectedText(
+                constraintLayout,
+                fromSavedTextActivity,
+                textID,
+                imagePath,
+                textDisplay,
+                textTranslatedDisplay,
+                textLanguageTranslatedCode
+        );
+        floatingActionButton.callOnClick();
+        //new SaveTextDB(this).execute();
     }
 
     public void shareText(View view) {
@@ -436,7 +457,7 @@ public class DisplayTextActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private static class SaveTextDB extends AsyncTask<Void, Void, Void> {
+    /*private static class SaveTextDB extends AsyncTask<Void, Void, Void> {
 
         private WeakReference<DisplayTextActivity> weakReference;
 
@@ -522,6 +543,6 @@ public class DisplayTextActivity extends AppCompatActivity {
             Toast.makeText(activity, "Saved Successfully", Toast.LENGTH_SHORT).show();
             activity.floatingActionButton.callOnClick();
         }
-    }
+    }*/
 
 }

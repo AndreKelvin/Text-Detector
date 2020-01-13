@@ -38,6 +38,7 @@ public class TextDetectorDaoTest extends TextDetectorDumbDBTest {
 
         // insert
         getDetectorDao().addDetectedText(detectedText);
+        System.out.println("Inserted...");
 
         // read
         List<TextDetectorDbTable> allDetectedText = getDetectorDao().getAllDetectedText();
@@ -55,13 +56,16 @@ public class TextDetectorDaoTest extends TextDetectorDumbDBTest {
             detectedText.setId(insertedTextId);
             assertEquals(detectedText.getId(), insertedTextId);
         }
+        System.out.println("Read...");
 
         // delete
         getDetectorDao().deleteDetectedText(detectedText);
+        System.out.println("Deleted...");
 
         // confirm the database is empty
         allDetectedText = getDetectorDao().getAllDetectedText();
         assertEquals(0, allDetectedText.size());
+        System.out.println("Database Empty...");
     }
 
     /*
@@ -78,6 +82,7 @@ public class TextDetectorDaoTest extends TextDetectorDumbDBTest {
 
         // insert
         getDetectorDao().addDetectedText(detectedText);
+        System.out.println("Inserted...");
 
         int insertedTextId = 0;
         // read
@@ -96,6 +101,7 @@ public class TextDetectorDaoTest extends TextDetectorDumbDBTest {
             detectedText.setId(insertedTextId);
             assertEquals(detectedText.getId(), insertedTextId);
         }
+        System.out.println("Read...");
 
         //update
         TextDetectorDbTable detectedTextUpdate = new TextDetectorDbTable(
@@ -106,6 +112,7 @@ public class TextDetectorDaoTest extends TextDetectorDumbDBTest {
                 TextDumbingUtil.IMAGE_UPDATED,
                 TextDumbingUtil.DATE_UPDATED);
         getDetectorDao().updateDetectedText(detectedTextUpdate);
+        System.out.println("Updated...");
 
         // read updated data to make sure data is actually updated
         List<TextDetectorDbTable> allDetectedTextUpdated = getDetectorDao().getAllDetectedText();
@@ -122,12 +129,15 @@ public class TextDetectorDaoTest extends TextDetectorDumbDBTest {
             detectedText.setId(insertedTextId);
             assertEquals(detectedText.getId(), insertedTextId);
         }
+        System.out.println("Read Update...");
 
         // delete
         getDetectorDao().deleteDetectedText(detectedText);
+        System.out.println("Deleted...");
 
         // confirm the database is empty
         allDetectedText = getDetectorDao().getAllDetectedText();
         assertEquals(0, allDetectedText.size());
+        System.out.println("Database Empty...");
     }
 }

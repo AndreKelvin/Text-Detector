@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mobile.textdetector.recyclerviewmodels.LanguageItems;
+import com.mobile.textdetector.R;
+
 import java.util.List;
 
 public class RecyclerViewLanguageAdapter extends RecyclerView.Adapter<RecyclerViewLanguageAdapter.LanguageViewHolder> {
@@ -21,11 +24,11 @@ public class RecyclerViewLanguageAdapter extends RecyclerView.Adapter<RecyclerVi
     private List<LanguageItems> languageList;
     private Context context;
     private LanguageSelected languageSelected;
-    static final String SELECTED_LANGUAGE_FLAG="SELECTED_LANGUAGE_FLAG";
-    static final String SELECTED_LANGUAGE_TEXT="SELECTED_LANGUAGE_TEXT";
-    static final String SELECTED_LANGUAGE_CODE="SELECTED_LANGUAGE_CODE";
+    public static final String SELECTED_LANGUAGE_FLAG="SELECTED_LANGUAGE_FLAG";
+    public static final String SELECTED_LANGUAGE_TEXT="SELECTED_LANGUAGE_TEXT";
+    public static final String SELECTED_LANGUAGE_CODE="SELECTED_LANGUAGE_CODE";
 
-    RecyclerViewLanguageAdapter(Context context, LanguageSelected languageSelected, List<LanguageItems> languageList) {
+    public RecyclerViewLanguageAdapter(Context context, LanguageSelected languageSelected, List<LanguageItems> languageList) {
         this.context = context;
         this.languageSelected = languageSelected;
         this.languageList = languageList;

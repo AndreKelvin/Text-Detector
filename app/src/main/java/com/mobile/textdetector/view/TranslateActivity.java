@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.mobile.textdetector.R;
+import com.mobile.textdetector.adapters.RecyclerViewLanguageAdapter;
+import com.mobile.textdetector.recyclerviewmodels.LanguageItems;
 
 import java.util.ArrayList;
 import java.util.Collections;

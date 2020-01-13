@@ -1,11 +1,11 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 
-class ViewAnimation {
-    static boolean rotateFab(final View v, boolean rotate) {
+public class ViewAnimation {
+    public static boolean rotateFab(final View v, boolean rotate) {
         v.animate().setDuration(200)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override

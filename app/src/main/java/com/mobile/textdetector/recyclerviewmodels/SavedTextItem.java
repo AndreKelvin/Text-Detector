@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.recyclerviewmodels;
 
 public class SavedTextItem {
 
@@ -9,7 +9,7 @@ public class SavedTextItem {
     private String image;
     private String date;
 
-    SavedTextItem(int textID, String text, String image, String textTranslated, String textTranslatedCode, String date) {
+    public SavedTextItem(int textID, String text, String image, String textTranslated, String textTranslatedCode, String date) {
         this.textID = textID;
         this.text = text;
         this.image = image;
@@ -18,7 +18,7 @@ public class SavedTextItem {
         this.date= date;
     }
 
-    int getTextID() {
+    public int getTextID() {
         return textID;
     }
 
@@ -34,7 +34,7 @@ public class SavedTextItem {
         this.text = text;
     }
 
-    String getTextTranslated() {
+    public String getTextTranslated() {
         return textTranslated;
     }
 
@@ -42,7 +42,7 @@ public class SavedTextItem {
         this.textTranslated = textTranslated;
     }
 
-    String getImage() {
+    public String getImage() {
         return image;
     }
 
@@ -50,7 +50,7 @@ public class SavedTextItem {
         this.image = image;
     }
 
-    String getTextTranslatedCode() {
+    public String getTextTranslatedCode() {
         return textTranslatedCode;
     }
 
@@ -58,7 +58,7 @@ public class SavedTextItem {
         this.textTranslatedCode = textTranslatedCode;
     }
 
-    String getDate() {
+    public String getDate() {
         return date;
     }
 

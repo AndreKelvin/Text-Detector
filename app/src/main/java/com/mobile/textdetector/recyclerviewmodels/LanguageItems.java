@@ -1,17 +1,17 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.recyclerviewmodels;
 
 public class LanguageItems {
     private int languageFlagImage;
     private String languageText;
     private String languageCode;
 
-    LanguageItems(int languageFlagImage, String languageText, String languageCode) {
+    public LanguageItems(int languageFlagImage, String languageText, String languageCode) {
         this.languageFlagImage = languageFlagImage;
         this.languageText = languageText;
         this.languageCode = languageCode;
     }
 
-    int getLanguageFlagImage() {
+    public int getLanguageFlagImage() {
         return languageFlagImage;
     }
 
@@ -19,7 +19,7 @@ public class LanguageItems {
         this.languageFlagImage = languageFlagImage;
     }
 
-    String getLanguageText() {
+    public String getLanguageText() {
         return languageText;
     }
 
@@ -27,7 +27,7 @@ public class LanguageItems {
         this.languageText = languageText;
     }
 
-    String getLanguageCode() {
+    public String getLanguageCode() {
         return languageCode;
     }
 

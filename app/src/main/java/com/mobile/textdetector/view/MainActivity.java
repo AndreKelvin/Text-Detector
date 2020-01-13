@@ -1,4 +1,4 @@
-package com.mobile.textdetector;
+package com.mobile.textdetector.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +33,7 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.android.material.tabs.TabLayout;
+import com.mobile.textdetector.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         AdRequest adRequest=new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
-        textDetectorDb= Room.databaseBuilder(this,TextDetectorDb.class,"textdetectordb").build();
+        textDetectorDb= Room.databaseBuilder(this,TextDetectorDb.class,"textdetectordb").fallbackToDestructiveMigration().build();
 
         surfaceView.getHolder().addCallback(this);
 
